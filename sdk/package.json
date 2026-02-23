@@ -1,0 +1,7 @@
+{
+  "name": "@tracedeck/sdk",
+  "version": "1.0.0",
+  "description": "TraceDeck middleware SDK for passive API monitoring",
+  "main": "index.js",
+  "license": "ISC"
+}
