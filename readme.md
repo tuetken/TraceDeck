@@ -74,10 +74,10 @@ TraceDeck uses Redis and BullMQ to process logs in the background, preventing da
 
 TraceDeck is composed of four primary components:
 
-/dashboard React frontend
-/api Express backend
-/middleware-sdk TraceDeck logger package
-/example-service Sample API for generating traffic
+/frontend React frontend
+/backend Express backend
+/sdk TraceDeck logger package
+/sample-data Sample API for generating traffic
 
 ### Data Flow
 
