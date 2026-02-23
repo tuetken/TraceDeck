@@ -3,5 +3,6 @@
   "version": "1.0.0",
   "description": "TraceDeck middleware SDK for passive API monitoring",
   "main": "index.js",
+  "type": "module",
   "license": "ISC"
 }

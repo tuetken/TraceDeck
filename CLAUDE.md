@@ -1,66 +1,8 @@
 # TraceDeck — CLAUDE.md
 
-## Project Purpose
-
-TraceDeck is a lightweight API observability platform for solo developers and small teams. It
-captures request metadata through passive middleware, processes logs asynchronously via a
-Redis/BullMQ pipeline, and presents performance analytics through a developer-focused dashboard.
-
-The project also serves as a backend engineering portfolio showcase, emphasizing middleware design,
-async ingestion, relational data modeling, and AWS deployment.
-
----
-
-## Architecture
-
-### Components
-
-- `/backend` — Express.js REST API + BullMQ workers (Node.js, TypeScript, CommonJS)
-- `/frontend` — React 19 dashboard (Vite, TanStack Query, React Router, Tailwind, TypeScript)
-- `/sdk` — Lightweight middleware package (`traceDeckLogger()`) developers drop into their own APIs
-- `/sample-data` — Example service for generating traffic against a local setup
-
-### Data Flow
-
-```
-Client Request
-→ Developer's API (with TraceDeck Middleware)
-→ HTTP POST to TraceDeck ingestion endpoint
-→ Redis Queue (BullMQ)
-→ Background Worker
-→ PostgreSQL (via Prisma)
-→ Dashboard (React frontend)
-```
-
-### Data Model
-
-```
-User
-└── Project
-    └── Endpoint
-        └── RequestLog
-```
-
-**RequestLog fields:** `endpoint_id`, `method`, `status_code`, `response_time_ms`, `ip_address`,
-`user_agent`, `created_at`
-
----
-
-## Tech Stack
-
-| Layer            | Technology                                 |
-|------------------|--------------------------------------------|
-| Backend runtime  | Node.js (CommonJS, TypeScript)             |
-| Backend framework| Express.js                                 |
-| ORM              | Prisma 7                                   |
-| Database         | PostgreSQL (AWS RDS in production)         |
-| Queue            | BullMQ + Redis (ioredis)                   |
-| Auth             | AWS Cognito (JWT)                          |
-| Frontend         | React 19, Vite, TypeScript                 |
-| Server state     | TanStack React Query                       |
-| Routing          | React Router v7                            |
-| Styling          | Tailwind CSS                               |
-| HTTP client      | Axios                                      |
+> This file covers **how to work** on TraceDeck: coding conventions, patterns, and workflows.
+> For system design, data model, tech stack, and file structure, see @architecture.md.
+> For project overview and goals, see @README.md.
 
 ---
 
@@ -76,23 +18,23 @@ User
 - Avoid over-engineering. Simple, direct solutions are preferred over clever or highly abstracted
   ones.
 - No unnecessary abstractions. If something is used only once, write it inline.
-- Comments should explain *why*, not *what*. If you need a comment to explain what the code does,
+- Comments should explain _why_, not _what_. If you need a comment to explain what the code does,
   consider rewriting it to be self-evident.
 
 ---
 
 ## Naming Conventions
 
-| Thing                      | Convention              | Example                    |
-|----------------------------|-------------------------|----------------------------|
-| Variables and functions    | `camelCase`             | `requestLog`, `getProject` |
-| Types and interfaces       | `PascalCase`            | `RequestLog`, `ProjectData`|
-| React components           | `PascalCase`            | `EndpointTable`            |
-| Component files            | `PascalCase`            | `EndpointTable.tsx`        |
-| Non-component files        | `camelCase`             | `projectService.ts`        |
-| Prisma models              | `PascalCase`            | `RequestLog`               |
-| Database columns           | `snake_case`            | `response_time_ms`         |
-| True constants             | `SCREAMING_SNAKE_CASE`  | `MAX_RETRY_ATTEMPTS`       |
+| Thing                   | Convention             | Example                     |
+| ----------------------- | ---------------------- | --------------------------- |
+| Variables and functions | `camelCase`            | `requestLog`, `getProject`  |
+| Types and interfaces    | `PascalCase`           | `RequestLog`, `ProjectData` |
+| React components        | `PascalCase`           | `EndpointTable`             |
+| Component files         | `PascalCase`           | `EndpointTable.tsx`         |
+| Non-component files     | `camelCase`            | `projectService.ts`         |
+| Prisma models           | `PascalCase`           | `RequestLog`                |
+| Database columns        | `snake_case`           | `response_time_ms`          |
+| True constants          | `SCREAMING_SNAKE_CASE` | `MAX_RETRY_ATTEMPTS`        |
 
 ---
 
@@ -133,7 +75,7 @@ function process(data: any) { ... }
 
 ```typescript
 // Route handler — bubble to centralized handler
-router.get('/projects/:id', async (req, res, next) => {
+router.get("/projects/:id", async (req, res, next) => {
   try {
     const project = await getProject(req.params.id);
     res.json(project);
