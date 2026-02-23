@@ -147,6 +147,9 @@ async function persistLog(logId: string, data: LogData): Promise<void> {
 
 ## Project-Specific Rules
 
+- **Keep `tasks.md` current.** After any meaningful change — new routes, schema migrations,
+  new source files, package updates — review `tasks.md` and update the build status table, REST
+  API status table, completed list, and up-next list to reflect the actual state of the project.
 - **SDK stays lean.** The `/sdk` package must have minimal dependencies — developers install it
   into their own APIs, so bloat is unacceptable.
 - **BullMQ workers must be resilient.** Use retry logic and dead-letter queue handling for failed
