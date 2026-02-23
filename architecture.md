@@ -6,17 +6,6 @@ Redis/BullMQ pipeline, and presents performance analytics through a developer-fo
 
 ---
 
-## Current Build State
-
-| Package       | Status        | Notes                                              |
-|---------------|---------------|----------------------------------------------------|
-| `backend`     | Scaffolded    | Dependencies installed, no source code yet         |
-| `frontend`    | Scaffolded    | Dependencies installed, no source code yet         |
-| `sdk`         | Scaffolded    | Package defined, no `traceDeckLogger()` yet        |
-| `sample-data` | Scaffolded    | Package defined, no example service yet            |
-
----
-
 ## Data Flow
 
 ```
@@ -147,15 +136,3 @@ efficient analytics aggregation queries scoped per project or endpoint.
 - **Route53** — DNS routing to the deployed application
 - **CI/CD** — Automated pipeline for build and deployment (details TBD)
 
----
-
-## Planned REST API
-
-> TODO: Fill in once routes are defined.
-
-Expected shape:
-- **Ingestion** — `POST /ingest` (receives log payloads from SDK middleware)
-- **Projects** — CRUD endpoints scoped to the authenticated user
-- **Endpoints** — CRUD endpoints nested under a project
-- **Analytics** — Aggregation queries for response times, status codes, usage metrics
-- **Auth** — Cognito token validation; no custom auth routes

@@ -2,6 +2,7 @@
 
 > This file covers **how to work** on TraceDeck: coding conventions, patterns, and workflows.
 > For system design, data model, tech stack, and file structure, see @architecture.md.
+> For current build state, task tracking, and REST API progress, see @tasks.md.
 > For project overview and goals, see @README.md.
 
 ---
