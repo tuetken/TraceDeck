@@ -8,7 +8,7 @@ datasource db {
 }
 
 model User {
-  id        String    @id @default(cuid())
+  id        String    @id @default(dbgenerated("gen_random_uuid()::text"))
   cognitoId String    @unique @map("cognito_id")
   email     String    @unique
   createdAt DateTime  @default(now()) @map("created_at")
@@ -18,7 +18,7 @@ model User {
 }
 
 model Project {
-  id          String     @id @default(cuid())
+  id          String     @id @default(dbgenerated("gen_random_uuid()::text"))
   userId      String     @map("user_id")
   name        String
   description String?
@@ -31,20 +31,21 @@ model Project {
 }
 
 model Endpoint {
-  id          String       @id @default(cuid())
+  id          String       @id @default(dbgenerated("gen_random_uuid()::text"))
   projectId   String       @map("project_id")
+  method      String
   path        String
   createdAt   DateTime     @default(now()) @map("created_at")
   project     Project      @relation(fields: [projectId], references: [id])
   requestLogs RequestLog[]
 
+  @@unique([projectId, method, path])
   @@map("endpoints")
 }
 
 model RequestLog {
-  id             String   @id @default(cuid())
+  id             String   @id @default(dbgenerated("gen_random_uuid()::text"))
   endpointId     String   @map("endpoint_id")
-  method         String
   statusCode     Int      @map("status_code")
   responseTimeMs Int      @map("response_time_ms")
   ipAddress      String?  @map("ip_address")
