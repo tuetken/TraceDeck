@@ -61,7 +61,7 @@ traffic against a local TraceDeck setup. Used for development and demos.
 
 | Layer            | Technology                                       |
 |------------------|--------------------------------------------------|
-| Backend runtime  | Node.js (ESM, TypeScript)                        |
+| Backend runtime  | Node.js (ESM, JavaScript)                        |
 | Backend framework| Express.js                                       |
 | ORM              | Prisma 7                                         |
 | Database         | PostgreSQL                                       |
@@ -82,15 +82,14 @@ traffic against a local TraceDeck setup. Used for development and demos.
 ```
 backend/
 ├── src/
-│   ├── index.ts              # Express app entry point, middleware registration
-│   ├── routes/               # One file per resource (projectRoutes.ts, etc.)
+│   ├── server.js             # Express app entry point, middleware registration
+│   ├── routes/               # One file per resource (projectRoutes.js, etc.)
 │   ├── services/             # Business logic delegated from route handlers
 │   ├── workers/              # BullMQ job processors
 │   ├── queues/               # Queue definitions and job producers
 │   ├── middleware/           # Auth, error handler, async wrapper
 │   └── prisma/
 │       └── schema.prisma     # Database schema
-├── tsconfig.json
 └── package.json
 ```
 

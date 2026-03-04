@@ -7,25 +7,25 @@
 
 ## Build Status
 
-| Package       | Status      | Notes                                                        |
-|---------------|-------------|--------------------------------------------------------------|
-| `backend`     | In Progress | `server.js` running; Express, CORS, dotenv wired up         |
-| `frontend`    | Scaffolded  | Dependencies installed, no source code yet                   |
-| `sdk`         | Scaffolded  | Package defined, no `traceDeckLogger()` yet                  |
-| `sample-data` | Scaffolded  | Package defined, no example service yet                      |
+| Package       | Status      | Notes                                                                          |
+|---------------|-------------|--------------------------------------------------------------------------------|
+| `backend`     | In Progress | Ingestion pipeline complete; auth middleware and CRUD routes pending            |
+| `frontend`    | Scaffolded  | Dependencies installed, TypeScript not configured, no source code yet           |
+| `sdk`         | Scaffolded  | Package defined, no `traceDeckLogger()` yet                                    |
+| `sample-data` | Scaffolded  | Package defined, no example service yet                                        |
 
 ---
 
 ## REST API Status
 
-| Route group    | Status  | Notes                                                       |
-|----------------|---------|-------------------------------------------------------------|
-| `GET /health`  | Stub    | Returns `{ status: 'ok' }`; no dependencies                |
-| `POST /ingest` | Stub    | Logs `req.body` to console; no queue or DB yet              |
-| Projects       | Planned | CRUD endpoints scoped to the authenticated user             |
-| Endpoints      | Planned | CRUD endpoints nested under a project                       |
-| Analytics      | Planned | Response times, status codes, usage metrics                 |
-| Auth           | Planned | Cognito JWT validation; no custom auth routes               |
+| Route group    | Status      | Notes                                                       |
+|----------------|-------------|-------------------------------------------------------------|
+| `GET /health`  | Done        | Returns `{ status: 'ok' }`                                 |
+| `POST /ingest` | Done        | Enqueues job to BullMQ; worker persists to DB               |
+| Projects       | Planned     | CRUD endpoints scoped to the authenticated user             |
+| Endpoints      | Planned     | CRUD endpoints nested under a project                       |
+| Analytics      | Planned     | Response times, status codes, usage metrics                 |
+| Auth           | Planned     | Cognito JWT validation; no custom auth routes               |
 
 ---
 
@@ -34,14 +34,28 @@
 - Monorepo scaffolded with npm workspaces (`backend`, `frontend`, `sdk`, `sample-data`)
 - Dependencies installed for backend (Express, Prisma, BullMQ, ioredis, etc.) and frontend (React 19, Vite, TanStack Query, React Router)
 - All packages switched from CommonJS to ESM (`"type": "module"`)
-- `backend/server.js` created — Express app entry point with CORS, dotenv, `GET /health`, and `POST /ingest` stub
+- `backend/src/server.js` — Express app with CORS, dotenv, `GET /health`, error handler, and `/ingest` route
+- `backend/src/routes/ingest.js` — `POST /ingest` enqueues payload to BullMQ; responds 202
+- `backend/src/queue.js` — BullMQ `ingestQueue` with ioredis connection
+- `backend/src/worker.js` — BullMQ worker: upserts `Endpoint`, creates `RequestLog`, graceful shutdown on SIGTERM/SIGINT
+- `backend/src/lib/db.js` — Prisma client initialized with `PrismaPg` adapter
+- `backend/src/prisma/schema.prisma` — Full schema: `User`, `Project`, `Endpoint`, `RequestLog`
+- 3 Prisma migrations run: initial schema, endpoint unique constraint, DB-level UUID defaults
 
 ---
 
 ## Up Next
 
-- Set up TypeScript in `backend` (`tsconfig.json`, install `typescript`, `tsx`, `@types/*`)
-- Set up TypeScript in `sdk`
-- Define Prisma schema (`User`, `Project`, `Endpoint`, `RequestLog`)
-- Run initial Prisma migration
-- Wire `POST /ingest` to BullMQ queue (replace console.log stub)
+### Phase 1 — Backend (testable via curl/Postman throughout)
+- Implement Cognito JWT auth middleware
+- Projects CRUD routes and service layer
+- Endpoints CRUD routes and service layer
+- Analytics routes (response times, status codes, usage by endpoint)
+
+### Phase 2 — SDK + traffic generation
+- Implement SDK `traceDeckLogger()` middleware
+- Build out `sample-data` example service (integrates SDK, generates realistic traffic)
+
+### Phase 3 — Frontend (complete API and real data exist before any UI is written)
+- Set up frontend: TypeScript, `@vitejs/plugin-react`, Tailwind, `vite.config.ts`, React entry point
+- Frontend pages and components: Dashboard, Projects view, Analytics view
