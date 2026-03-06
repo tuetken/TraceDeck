@@ -19,6 +19,7 @@
   "dependencies": {
     "@prisma/adapter-pg": "^7.4.2",
     "@prisma/client": "^7.4.0",
+    "aws-jwt-verify": "^5.1.1",
     "axios": "^1.13.5",
     "bullmq": "^5.69.3",
     "cors": "^2.8.6",

@@ -9,7 +9,7 @@
 
 | Package       | Status      | Notes                                                                          |
 |---------------|-------------|--------------------------------------------------------------------------------|
-| `backend`     | In Progress | Ingestion pipeline complete; auth middleware and CRUD routes pending            |
+| `backend`     | In Progress | Auth middleware done; CRUD routes pending                                       |
 | `frontend`    | Scaffolded  | Dependencies installed, TypeScript not configured, no source code yet           |
 | `sdk`         | Scaffolded  | Package defined, no `traceDeckLogger()` yet                                    |
 | `sample-data` | Scaffolded  | Package defined, no example service yet                                        |
@@ -25,7 +25,7 @@
 | Projects       | Planned     | CRUD endpoints scoped to the authenticated user             |
 | Endpoints      | Planned     | CRUD endpoints nested under a project                       |
 | Analytics      | Planned     | Response times, status codes, usage metrics                 |
-| Auth           | Planned     | Cognito JWT validation; no custom auth routes               |
+| Auth           | Done        | `middleware/auth.js` — verifies Cognito ID token, upserts user, sets `req.user` |
 
 ---
 
@@ -41,13 +41,13 @@
 - `backend/src/lib/db.js` — Prisma client initialized with `PrismaPg` adapter
 - `backend/src/prisma/schema.prisma` — Full schema: `User`, `Project`, `Endpoint`, `RequestLog`
 - 3 Prisma migrations run: initial schema, endpoint unique constraint, DB-level UUID defaults
+- `backend/src/middleware/auth.js` — Cognito ID token verification via `aws-jwt-verify`; upserts user on first login; attaches DB user to `req.user`
 
 ---
 
 ## Up Next
 
 ### Phase 1 — Backend (testable via curl/Postman throughout)
-- Implement Cognito JWT auth middleware
 - Projects CRUD routes and service layer
 - Endpoints CRUD routes and service layer
 - Analytics routes (response times, status codes, usage by endpoint)
