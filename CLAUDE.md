@@ -7,6 +7,18 @@
 
 ---
 
+## Task Tracking
+
+After every meaningful change — new route, schema migration, scaffolding, config update — review
+[tasks.md](tasks.md) and update it to reflect the current state. This keeps the build log accurate
+and "Up Next" actionable at all times.
+
+- Move completed items from "Up Next" into the "Completed" section.
+- Update the **Build Status** and **REST API Status** tables if the change affects them.
+- Add newly discovered work to "Up Next" if it surfaces during implementation.
+
+---
+
 ## Coding Philosophy
 
 **Readability first, conciseness by discipline.**
