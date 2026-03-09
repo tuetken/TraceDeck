@@ -2,6 +2,8 @@ import 'dotenv/config';
 import express from 'express';
 import cors from 'cors';
 import ingestRouter from './routes/ingest.js';
+import projectsRouter from './routes/projects.js';
+import endpointsRouter from './routes/endpoints.js';
 import auth from './middleware/auth.js';
 
 const app = express();
@@ -15,6 +17,8 @@ app.get('/health', (req, res) => {
 });
 
 app.use('/ingest', ingestRouter);
+app.use('/projects', auth, projectsRouter);
+app.use('/projects', auth, endpointsRouter);
 
 app.get('/me', auth, (req, res) => {
   res.json(req.user);
