@@ -137,6 +137,26 @@ Logs belong to endpoints, allowing analytics to be scoped per project.
 
 ---
 
+## Testing
+
+The backend includes an integration test suite that verifies all Phase 1 routes against a real database. Tests use a mock auth middleware so no Cognito credentials are needed.
+
+**Prerequisites:** PostgreSQL and Redis running locally (same setup as development).
+
+**Run the tests:**
+```bash
+cd backend
+npm test
+```
+
+**What is tested:**
+- `GET /health` and `POST /ingest`
+- Projects CRUD (create, list, get, update, delete, ownership enforcement)
+- Endpoints CRUD nested under projects
+- Analytics: summary aggregates, per-endpoint breakdown, time range filtering, empty state
+
+---
+
 ## Authentication
 
 TraceDeck uses AWS Cognito for authentication and authorization.

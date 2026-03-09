@@ -9,7 +9,7 @@
 
 | Package       | Status      | Notes                                                                          |
 |---------------|-------------|--------------------------------------------------------------------------------|
-| `backend`     | Done        | Auth, Projects CRUD, Endpoints CRUD, Analytics routes all complete             |
+| `backend`     | Done        | Auth, Projects CRUD, Endpoints CRUD, Analytics routes, integration tests complete |
 | `frontend`    | Scaffolded  | Dependencies installed, TypeScript not configured, no source code yet           |
 | `sdk`         | Scaffolded  | Package defined, no `traceDeckLogger()` yet                                    |
 | `sample-data` | Scaffolded  | Package defined, no example service yet                                        |
@@ -45,6 +45,8 @@
 - `backend/src/routes/projects.js` — Full CRUD for Projects (`GET/POST /projects`, `GET/PUT/DELETE /projects/:id`), scoped to authenticated user
 - `backend/src/routes/endpoints.js` — Full CRUD for Endpoints (`GET/POST /projects/:projectId/endpoints`, `GET/PUT/DELETE /projects/:projectId/endpoints/:id`)
 - `backend/src/routes/analytics.js` — Analytics routes: summary aggregates and per-endpoint breakdown (`GET /projects/:projectId/analytics/summary`, `GET /projects/:projectId/analytics/endpoints`); supports optional `?from`/`?to` time filtering
+- `backend/src/app.js` — Express app factory (`createApp(authMiddleware)`); decouples app setup from server startup to enable testing with mock auth
+- `backend/src/test/` — Vitest + Supertest integration test suite: 19 tests across health, projects, endpoints, and analytics routes; mock auth bypasses Cognito; real DB with per-file isolated test users cleaned up after each run
 
 ---
 

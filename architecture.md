@@ -127,6 +127,27 @@ efficient analytics aggregation queries scoped per project or endpoint.
 
 ---
 
+## Testing Strategy
+
+**Framework:** Vitest + Supertest. Tests make HTTP requests directly to the Express app object
+without starting a server. No running server or port is needed.
+
+**Auth in tests:** `app.js` exports a `createApp(authMiddleware)` factory. Tests pass a one-liner
+mock that injects a seeded test user, bypassing Cognito entirely. Production `server.js` always
+uses the real Cognito middleware.
+
+**Database:** Tests run against the real local database. Each test file seeds its own isolated user
+and associated data in `beforeAll`, then deletes everything in `afterAll`. No test data persists
+after the suite completes.
+
+**Ingest route:** The BullMQ queue is mocked so Redis is not required to run the test suite.
+Analytics tests seed `RequestLog` rows directly via Prisma, testing query logic independently of
+the ingestion pipeline.
+
+Test files live in `backend/src/test/`. Run with `npm test` from the `backend` directory.
+
+---
+
 ## AWS Infrastructure
 
 - **EC2** — Docker-based deployment for the backend service
