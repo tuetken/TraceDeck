@@ -9,7 +9,7 @@
 
 | Package       | Status      | Notes                                                                          |
 |---------------|-------------|--------------------------------------------------------------------------------|
-| `backend`     | In Progress | Auth, Projects CRUD, Endpoints CRUD done; Analytics routes pending             |
+| `backend`     | Done        | Auth, Projects CRUD, Endpoints CRUD, Analytics routes all complete             |
 | `frontend`    | Scaffolded  | Dependencies installed, TypeScript not configured, no source code yet           |
 | `sdk`         | Scaffolded  | Package defined, no `traceDeckLogger()` yet                                    |
 | `sample-data` | Scaffolded  | Package defined, no example service yet                                        |
@@ -24,7 +24,7 @@
 | `POST /ingest` | Done        | Enqueues job to BullMQ; worker persists to DB               |
 | Projects       | Done        | Full CRUD scoped to the authenticated user (`routes/projects.js`) |
 | Endpoints      | Done        | Full CRUD nested under a project (`routes/endpoints.js`)    |
-| Analytics      | Planned     | Response times, status codes, usage metrics                 |
+| Analytics      | Done        | Summary + per-endpoint breakdown (`routes/analytics.js`); optional `?from`/`?to` filtering |
 | Auth           | Done        | `middleware/auth.js` — verifies Cognito ID token, upserts user, sets `req.user` |
 
 ---
@@ -44,13 +44,11 @@
 - `backend/src/middleware/auth.js` — Cognito ID token verification via `aws-jwt-verify`; upserts user on first login; attaches DB user to `req.user`
 - `backend/src/routes/projects.js` — Full CRUD for Projects (`GET/POST /projects`, `GET/PUT/DELETE /projects/:id`), scoped to authenticated user
 - `backend/src/routes/endpoints.js` — Full CRUD for Endpoints (`GET/POST /projects/:projectId/endpoints`, `GET/PUT/DELETE /projects/:projectId/endpoints/:id`)
+- `backend/src/routes/analytics.js` — Analytics routes: summary aggregates and per-endpoint breakdown (`GET /projects/:projectId/analytics/summary`, `GET /projects/:projectId/analytics/endpoints`); supports optional `?from`/`?to` time filtering
 
 ---
 
 ## Up Next
-
-### Phase 1 — Backend (testable via curl/Postman throughout)
-- Analytics routes (response times, status codes, usage by endpoint)
 
 ### Phase 2 — SDK + traffic generation
 - Implement SDK `traceDeckLogger()` middleware

@@ -17,6 +17,14 @@ and "Up Next" actionable at all times.
 - Update the **Build Status** and **REST API Status** tables if the change affects them.
 - Add newly discovered work to "Up Next" if it surfaces during implementation.
 
+After all other output, end every response with a suggested commit message in this format:
+```
+type(scope): description
+```
+Use the same conventional commit style as the repo history (e.g. `feat(api): ...`, `fix(auth): ...`, `chore(deps): ...`).
+
+**Only output the message as text — do not run `git commit` or stage any files.**
+
 ---
 
 ## Coding Philosophy

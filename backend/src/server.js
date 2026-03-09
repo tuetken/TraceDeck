@@ -4,6 +4,7 @@ import cors from 'cors';
 import ingestRouter from './routes/ingest.js';
 import projectsRouter from './routes/projects.js';
 import endpointsRouter from './routes/endpoints.js';
+import analyticsRouter from './routes/analytics.js';
 import auth from './middleware/auth.js';
 
 const app = express();
@@ -19,6 +20,7 @@ app.get('/health', (req, res) => {
 app.use('/ingest', ingestRouter);
 app.use('/projects', auth, projectsRouter);
 app.use('/projects', auth, endpointsRouter);
+app.use('/projects', auth, analyticsRouter);
 
 app.get('/me', auth, (req, res) => {
   res.json(req.user);
