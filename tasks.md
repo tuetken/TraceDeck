@@ -11,8 +11,8 @@
 |---------------|-------------|--------------------------------------------------------------------------------|
 | `backend`     | Done        | Auth, Projects CRUD, Endpoints CRUD, Analytics routes, integration tests complete |
 | `frontend`    | Scaffolded  | Dependencies installed, TypeScript not configured, no source code yet           |
-| `sdk`         | Scaffolded  | Package defined, no `traceDeckLogger()` yet                                    |
-| `sample-data` | Scaffolded  | Package defined, no example service yet                                        |
+| `sdk`         | Done        | `traceDeckLogger()` middleware implemented; zero dependencies, uses native fetch |
+| `sample-data` | Done        | Example Express service with 3 routes + autonomous traffic generator            |
 
 ---
 
@@ -47,14 +47,12 @@
 - `backend/src/routes/analytics.js` — Analytics routes: summary aggregates and per-endpoint breakdown (`GET /projects/:projectId/analytics/summary`, `GET /projects/:projectId/analytics/endpoints`); supports optional `?from`/`?to` time filtering
 - `backend/src/app.js` — Express app factory (`createApp(authMiddleware)`); decouples app setup from server startup to enable testing with mock auth
 - `backend/src/test/` — Vitest + Supertest integration test suite: 19 tests across health, projects, endpoints, and analytics routes; mock auth bypasses Cognito; real DB with per-file isolated test users cleaned up after each run
+- `sdk/index.js` — `traceDeckLogger(config)` Express middleware; zero dependencies (native fetch); fire-and-forget POST to `/ingest`; uses `req.baseUrl + req.path` for correct path capture at any mount depth
+- `sample-data/index.js` — Standalone Express service with `GET /api/users`, `POST /api/orders`, `GET /api/products/:id` routes; realistic status code and delay variation; autonomous traffic generator fires random requests every 1.5–4s
 
 ---
 
 ## Up Next
-
-### Phase 2 — SDK + traffic generation
-- Implement SDK `traceDeckLogger()` middleware
-- Build out `sample-data` example service (integrates SDK, generates realistic traffic)
 
 ### Phase 3 — Frontend (complete API and real data exist before any UI is written)
 - Set up frontend: TypeScript, `@vitejs/plugin-react`, Tailwind, `vite.config.ts`, React entry point
