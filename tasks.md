@@ -7,25 +7,25 @@
 
 ## Build Status
 
-| Package       | Status      | Notes                                                                          |
-|---------------|-------------|--------------------------------------------------------------------------------|
-| `backend`     | Done        | Auth, Projects CRUD, Endpoints CRUD, Analytics routes, integration tests complete |
-| `frontend`    | Scaffolded  | Dependencies installed, TypeScript not configured, no source code yet           |
-| `sdk`         | Done        | `traceDeckLogger()` middleware implemented; zero dependencies, uses native fetch |
-| `sample-data` | Done        | Example Express service with 3 routes + autonomous traffic generator            |
+| Package       | Status     | Notes                                                                             |
+| ------------- | ---------- | --------------------------------------------------------------------------------- |
+| `backend`     | Done       | Auth, Projects CRUD, Endpoints CRUD, Analytics routes, integration tests complete |
+| `frontend`    | Scaffolded | Dependencies installed, TypeScript not configured, no source code yet             |
+| `sdk`         | Done       | `traceDeckLogger()` middleware implemented; zero dependencies, uses native fetch  |
+| `sample-data` | Done       | Example Express service with 3 routes + autonomous traffic generator              |
 
 ---
 
 ## REST API Status
 
-| Route group    | Status      | Notes                                                       |
-|----------------|-------------|-------------------------------------------------------------|
-| `GET /health`  | Done        | Returns `{ status: 'ok' }`                                 |
-| `POST /ingest` | Done        | Enqueues job to BullMQ; worker persists to DB               |
-| Projects       | Done        | Full CRUD scoped to the authenticated user (`routes/projects.js`) |
-| Endpoints      | Done        | Full CRUD nested under a project (`routes/endpoints.js`)    |
-| Analytics      | Done        | Summary + per-endpoint breakdown (`routes/analytics.js`); optional `?from`/`?to` filtering |
-| Auth           | Done        | `middleware/auth.js` — verifies Cognito ID token, upserts user, sets `req.user` |
+| Route group    | Status | Notes                                                                                      |
+| -------------- | ------ | ------------------------------------------------------------------------------------------ |
+| `GET /health`  | Done   | Returns `{ status: 'ok' }`                                                                 |
+| `POST /ingest` | Done   | Enqueues job to BullMQ; worker persists to DB                                              |
+| Projects       | Done   | Full CRUD scoped to the authenticated user (`routes/projects.js`)                          |
+| Endpoints      | Done   | Full CRUD nested under a project (`routes/endpoints.js`)                                   |
+| Analytics      | Done   | Summary + per-endpoint breakdown (`routes/analytics.js`); optional `?from`/`?to` filtering |
+| Auth           | Done   | `middleware/auth.js` — verifies Cognito ID token, upserts user, sets `req.user`            |
 
 ---
 
@@ -54,6 +54,47 @@
 
 ## Up Next
 
-### Phase 3 — Frontend (complete API and real data exist before any UI is written)
-- Set up frontend: TypeScript, `@vitejs/plugin-react`, Tailwind, `vite.config.ts`, React entry point
-- Frontend pages and components: Dashboard, Projects view, Analytics view
+### Phase 3 — Frontend
+
+Design reference: Linear dashboard aesthetic — near-black background, card-based layout, data-dense tables, Recharts for charts.
+New packages needed: `@vitejs/plugin-react`, `typescript`, `@types/react`, `@types/react-dom`, `tailwindcss`, `@tailwindcss/vite`, `recharts`, `amazon-cognito-identity-js`.
+
+#### 3.1 — Scaffold
+- `index.html` — Vite HTML entry, mounts `#root`
+- `vite.config.ts` — React plugin + Tailwind Vite plugin
+- `tsconfig.json` — Strict TypeScript config targeting ESNext
+- `src/main.tsx` — ReactDOM entry, `<App />` wrapped in `QueryClientProvider`
+- `src/index.css` — Tailwind `@import` + CSS custom properties for dark theme tokens
+
+#### 3.2 — Auth
+- `src/lib/auth.ts` — `signIn`, `signOut`, `getSession` wrapping `amazon-cognito-identity-js`
+- `src/lib/api.ts` — Axios instance with `VITE_API_URL` base; request interceptor attaches Cognito `idToken`; 401 interceptor clears session and redirects to `/login`
+- `src/pages/LoginPage.tsx` — Email/password form, Linear-style centered card
+- `src/App.tsx` — `createBrowserRouter` with `<ProtectedRoute>` wrapper and full route tree
+
+Env vars required: `VITE_COGNITO_USER_POOL_ID`, `VITE_COGNITO_CLIENT_ID`, `VITE_API_URL`
+
+#### 3.3 — Projects
+- `src/hooks/useProjects.ts` — `useProjects`, `useCreateProject`, `useDeleteProject` TanStack Query hooks
+- `src/components/Sidebar.tsx` — Left nav with TraceDeck logo and project links
+- `src/components/Breadcrumb.tsx` — Linear-style `A › B › C` nav
+- `src/components/Modal.tsx` — Overlay modal for create forms
+- `src/components/ProjectCard.tsx` — Card: name, description, created date
+- `src/pages/ProjectsPage.tsx` — Grid of `<ProjectCard>`, "New Project" button opens modal
+
+#### 3.4 — Dashboard (stats + layout)
+- `src/hooks/useAnalytics.ts` — `useAnalyticsSummary(projectId, range)` and `useAnalyticsEndpoints(projectId, range)`; `range: '24h' | '7d' | '30d' | 'all'` converted to `?from`/`?to` ISO params
+- `src/components/StatCard.tsx` — Label + large value display
+- `src/components/TimeRangeSelector.tsx` — Button group: 24h / 7d / 30d / All
+- `src/pages/ProjectDashboardPage.tsx` — Breadcrumb, time selector, stat cards row; chart placeholders
+
+#### 3.5 — Charts
+- `src/components/ResponseTimeChart.tsx` — Recharts `BarChart`, avg response time per endpoint
+- `src/components/StatusCodeChart.tsx` — Recharts `BarChart`, status code counts color-coded by class (2xx green, 4xx yellow, 5xx red)
+- Wire charts into `ProjectDashboardPage`
+
+#### 3.6 — Endpoints
+- `src/hooks/useEndpoints.ts` — `useEndpoints`, `useCreateEndpoint` TanStack Query hooks
+- `src/components/MethodBadge.tsx` — Colored pill for GET / POST / PUT / DELETE
+- `src/components/EndpointUsageTable.tsx` — Table: method, path, request count, avg response time
+- `src/pages/EndpointsPage.tsx` — Breadcrumb, endpoint table, "Add Endpoint" inline form row
