@@ -6,6 +6,8 @@ import TimeRangeSelector from '../components/TimeRangeSelector'
 import { useProjects } from '../hooks/useProjects'
 import { useAnalyticsSummary, useAnalyticsEndpoints } from '../hooks/useAnalytics'
 import type { TimeRange } from '../hooks/useAnalytics'
+import ResponseTimeChart from '../components/ResponseTimeChart'
+import StatusCodeChart from '../components/StatusCodeChart'
 
 export default function ProjectDashboardPage() {
   const { projectId } = useParams<{ projectId: string }>()
@@ -63,28 +65,9 @@ export default function ProjectDashboardPage() {
             />
           </div>
 
-          {/* Chart placeholders — wired in Phase 3.5 */}
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-            <div
-              className="rounded-lg p-4 flex items-center justify-center h-48 text-sm"
-              style={{
-                backgroundColor: 'var(--color-bg-surface)',
-                border: '1px solid var(--color-border)',
-                color: 'var(--color-text-muted)',
-              }}
-            >
-              Response Time Chart — Phase 3.5
-            </div>
-            <div
-              className="rounded-lg p-4 flex items-center justify-center h-48 text-sm"
-              style={{
-                backgroundColor: 'var(--color-bg-surface)',
-                border: '1px solid var(--color-border)',
-                color: 'var(--color-text-muted)',
-              }}
-            >
-              Status Code Chart — Phase 3.5
-            </div>
+            <ResponseTimeChart endpoints={endpoints} />
+            <StatusCodeChart statusCodes={summary?.statusCodes ?? []} />
           </div>
         </>
       )}

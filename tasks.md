@@ -10,7 +10,7 @@
 | Package       | Status     | Notes                                                                             |
 | ------------- | ---------- | --------------------------------------------------------------------------------- |
 | `backend`     | Done       | Auth, Projects CRUD, Endpoints CRUD, Analytics routes, integration tests complete |
-| `frontend`    | In Progress | Phase 3.4 dashboard complete; useAnalytics hooks, StatCard, TimeRangeSelector, ProjectDashboardPage wired |
+| `frontend`    | In Progress | Phase 3.5 charts complete; ResponseTimeChart, StatusCodeChart wired into ProjectDashboardPage |
 | `sdk`         | Done       | `traceDeckLogger()` middleware implemented; zero dependencies, uses native fetch  |
 | `sample-data` | Done       | Example Express service with 3 routes + autonomous traffic generator              |
 
@@ -51,7 +51,8 @@
 - Phase 3.1 frontend scaffold — `index.html`, `vite.config.ts`, `tsconfig.json`, `src/main.tsx` with `QueryClientProvider`, `src/index.css` with dark theme CSS custom properties
 - Phase 3.2 frontend auth — Cognito sign-in via `amazon-cognito-identity-js`, Axios instance with token interceptor, `LoginPage`, `ProtectedRoute`, React Router v7 wired in `App.tsx`
 - Phase 3.3 frontend projects — `useProjects`, `useCreateProject`, `useDeleteProject` TanStack Query hooks; `Sidebar`, `Breadcrumb`, `Modal`, `ProjectCard` components; `ProjectsPage` with grid layout and create modal; `AppShell` layout with sticky sidebar; routes updated in `App.tsx`
-- Phase 3.4 frontend dashboard — `useAnalyticsSummary`, `useAnalyticsEndpoints` hooks with `TimeRange` → `?from`/`?to` conversion; `StatCard`, `TimeRangeSelector` components; `ProjectDashboardPage` with breadcrumb, time selector, 4 stat cards (total requests, avg response time, error rate, endpoints tracked), and chart placeholders; `/projects/:projectId` route added to `App.tsx`
+- Phase 3.4 frontend dashboard — `useAnalyticsSummary`, `useAnalyticsEndpoints` hooks with `TimeRange` → `?from`/`?to` conversion; `StatCard`, `TimeRangeSelector` components; `ProjectDashboardPage` with breadcrumb, time selector, 4 stat cards (total requests, avg response time, error rate, endpoints tracked), and chart placeholders
+- Phase 3.5 frontend charts — `ResponseTimeChart` (Recharts `BarChart`, avg response time per endpoint, accent-colored bars); `StatusCodeChart` (Recharts `BarChart`, status code counts color-coded by class — 2xx green, 4xx yellow, 5xx red); both wired into `ProjectDashboardPage` replacing placeholders; `/projects/:projectId` route added to `App.tsx`
 - `sample-data/index.js` — Standalone Express service with `GET /api/users`, `POST /api/orders`, `GET /api/products/:id` routes; realistic status code and delay variation; autonomous traffic generator fires random requests every 1.5–4s
 
 ---
@@ -96,7 +97,7 @@ New packages needed: `@vitejs/plugin-react`, `typescript`, `@types/react`, `@typ
 - `src/components/TimeRangeSelector.tsx` — Button group: 24h / 7d / 30d / All
 - `src/pages/ProjectDashboardPage.tsx` — Breadcrumb, time selector, stat cards row; chart placeholders
 
-#### 3.5 — Charts
+#### ~~3.5 — Charts~~ ✓ Done
 - `src/components/ResponseTimeChart.tsx` — Recharts `BarChart`, avg response time per endpoint
 - `src/components/StatusCodeChart.tsx` — Recharts `BarChart`, status code counts color-coded by class (2xx green, 4xx yellow, 5xx red)
 - Wire charts into `ProjectDashboardPage`
