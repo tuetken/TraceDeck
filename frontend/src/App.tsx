@@ -4,6 +4,7 @@ import ProtectedRoute from './components/ProtectedRoute'
 import Sidebar from './components/Sidebar'
 import ProjectsPage from './pages/ProjectsPage'
 import ProjectDashboardPage from './pages/ProjectDashboardPage'
+import EndpointsPage from './pages/EndpointsPage'
 
 function AppShell() {
   return (
@@ -24,6 +25,7 @@ export default function App() {
             <Route path="/" element={<Navigate to="/projects" replace />} />
             <Route path="/projects" element={<ProjectsPage />} />
             <Route path="/projects/:projectId" element={<ProjectDashboardPage />} />
+            <Route path="/projects/:projectId/endpoints" element={<EndpointsPage />} />
           </Route>
         </Route>
         <Route path="*" element={<Navigate to="/" replace />} />
