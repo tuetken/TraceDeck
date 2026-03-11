@@ -1,6 +1,17 @@
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, Navigate, Outlet } from 'react-router-dom'
 import LoginPage from './pages/LoginPage'
 import ProtectedRoute from './components/ProtectedRoute'
+import Sidebar from './components/Sidebar'
+import ProjectsPage from './pages/ProjectsPage'
+
+function AppShell() {
+  return (
+    <div className="flex min-h-screen">
+      <Sidebar />
+      <Outlet />
+    </div>
+  )
+}
 
 export default function App() {
   return (
@@ -8,7 +19,10 @@ export default function App() {
       <Routes>
         <Route path="/login" element={<LoginPage />} />
         <Route element={<ProtectedRoute />}>
-          <Route path="/" element={<div>Dashboard (coming in 3.3)</div>} />
+          <Route element={<AppShell />}>
+            <Route path="/" element={<Navigate to="/projects" replace />} />
+            <Route path="/projects" element={<ProjectsPage />} />
+          </Route>
         </Route>
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>

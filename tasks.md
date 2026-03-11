@@ -10,7 +10,7 @@
 | Package       | Status     | Notes                                                                             |
 | ------------- | ---------- | --------------------------------------------------------------------------------- |
 | `backend`     | Done       | Auth, Projects CRUD, Endpoints CRUD, Analytics routes, integration tests complete |
-| `frontend`    | In Progress | Phase 3.2 auth complete; Cognito sign-in, Axios interceptors, ProtectedRoute wired |
+| `frontend`    | In Progress | Phase 3.3 projects complete; Sidebar, ProjectsPage, useProjects hooks, Modal, Breadcrumb, ProjectCard wired |
 | `sdk`         | Done       | `traceDeckLogger()` middleware implemented; zero dependencies, uses native fetch  |
 | `sample-data` | Done       | Example Express service with 3 routes + autonomous traffic generator              |
 
@@ -50,6 +50,7 @@
 - `sdk/index.js` — `traceDeckLogger(config)` Express middleware; zero dependencies (native fetch); fire-and-forget POST to `/ingest`; uses `req.baseUrl + req.path` for correct path capture at any mount depth
 - Phase 3.1 frontend scaffold — `index.html`, `vite.config.ts`, `tsconfig.json`, `src/main.tsx` with `QueryClientProvider`, `src/index.css` with dark theme CSS custom properties
 - Phase 3.2 frontend auth — Cognito sign-in via `amazon-cognito-identity-js`, Axios instance with token interceptor, `LoginPage`, `ProtectedRoute`, React Router v7 wired in `App.tsx`
+- Phase 3.3 frontend projects — `useProjects`, `useCreateProject`, `useDeleteProject` TanStack Query hooks; `Sidebar`, `Breadcrumb`, `Modal`, `ProjectCard` components; `ProjectsPage` with grid layout and create modal; `AppShell` layout with sticky sidebar; routes updated in `App.tsx`
 - `sample-data/index.js` — Standalone Express service with `GET /api/users`, `POST /api/orders`, `GET /api/products/:id` routes; realistic status code and delay variation; autonomous traffic generator fires random requests every 1.5–4s
 
 ---
@@ -71,6 +72,7 @@ New packages needed: `@vitejs/plugin-react`, `typescript`, `@types/react`, `@typ
 - `src/App.tsx` — Minimal placeholder; will be replaced in Phase 3.2
 
 #### ~~3.2 — Auth~~ ✓ Done
+
 - `frontend/.env` — `VITE_COGNITO_USER_POOL_ID`, `VITE_COGNITO_CLIENT_ID`, `VITE_COGNITO_REGION`, `VITE_API_URL`
 - `src/lib/auth.ts` — `signIn`, `signOut`, `getIdToken`, `isAuthenticated` wrapping `amazon-cognito-identity-js`
 - `src/lib/api.ts` — Axios instance; request interceptor attaches Cognito id token; 401 interceptor redirects to `/login`
@@ -78,13 +80,14 @@ New packages needed: `@vitejs/plugin-react`, `typescript`, `@types/react`, `@typ
 - `src/components/ProtectedRoute.tsx` — Checks session; redirects unauthenticated users to `/login`
 - `src/App.tsx` — React Router v7 with `/login`, `/` (protected placeholder), and wildcard catch-all
 
-#### 3.3 — Projects
+#### ~~3.3 — Projects~~ ✓ Done
 - `src/hooks/useProjects.ts` — `useProjects`, `useCreateProject`, `useDeleteProject` TanStack Query hooks
 - `src/components/Sidebar.tsx` — Left nav with TraceDeck logo and project links
 - `src/components/Breadcrumb.tsx` — Linear-style `A › B › C` nav
 - `src/components/Modal.tsx` — Overlay modal for create forms
 - `src/components/ProjectCard.tsx` — Card: name, description, created date
 - `src/pages/ProjectsPage.tsx` — Grid of `<ProjectCard>`, "New Project" button opens modal
+- `src/App.tsx` — `AppShell` layout with sticky `Sidebar`; `/projects` route added; `/` redirects to `/projects`
 
 #### 3.4 — Dashboard (stats + layout)
 - `src/hooks/useAnalytics.ts` — `useAnalyticsSummary(projectId, range)` and `useAnalyticsEndpoints(projectId, range)`; `range: '24h' | '7d' | '30d' | 'all'` converted to `?from`/`?to` ISO params
