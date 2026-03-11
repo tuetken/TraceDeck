@@ -48,6 +48,10 @@ export function signOut(): void {
   userPool.getCurrentUser()?.signOut()
 }
 
+export function getCurrentUserEmail(): string | null {
+  return userPool.getCurrentUser()?.getUsername() ?? null
+}
+
 export function getIdToken(): Promise<string | null> {
   const user = userPool.getCurrentUser()
   if (!user) return Promise.resolve(null)
