@@ -10,7 +10,7 @@
 | Package       | Status     | Notes                                                                             |
 | ------------- | ---------- | --------------------------------------------------------------------------------- |
 | `backend`     | Done       | Auth, Projects CRUD, Endpoints CRUD, Analytics routes, integration tests complete |
-| `frontend`    | In Progress | Phase 3.3 projects complete; Sidebar, ProjectsPage, useProjects hooks, Modal, Breadcrumb, ProjectCard wired |
+| `frontend`    | In Progress | Phase 3.4 dashboard complete; useAnalytics hooks, StatCard, TimeRangeSelector, ProjectDashboardPage wired |
 | `sdk`         | Done       | `traceDeckLogger()` middleware implemented; zero dependencies, uses native fetch  |
 | `sample-data` | Done       | Example Express service with 3 routes + autonomous traffic generator              |
 
@@ -51,6 +51,7 @@
 - Phase 3.1 frontend scaffold — `index.html`, `vite.config.ts`, `tsconfig.json`, `src/main.tsx` with `QueryClientProvider`, `src/index.css` with dark theme CSS custom properties
 - Phase 3.2 frontend auth — Cognito sign-in via `amazon-cognito-identity-js`, Axios instance with token interceptor, `LoginPage`, `ProtectedRoute`, React Router v7 wired in `App.tsx`
 - Phase 3.3 frontend projects — `useProjects`, `useCreateProject`, `useDeleteProject` TanStack Query hooks; `Sidebar`, `Breadcrumb`, `Modal`, `ProjectCard` components; `ProjectsPage` with grid layout and create modal; `AppShell` layout with sticky sidebar; routes updated in `App.tsx`
+- Phase 3.4 frontend dashboard — `useAnalyticsSummary`, `useAnalyticsEndpoints` hooks with `TimeRange` → `?from`/`?to` conversion; `StatCard`, `TimeRangeSelector` components; `ProjectDashboardPage` with breadcrumb, time selector, 4 stat cards (total requests, avg response time, error rate, endpoints tracked), and chart placeholders; `/projects/:projectId` route added to `App.tsx`
 - `sample-data/index.js` — Standalone Express service with `GET /api/users`, `POST /api/orders`, `GET /api/products/:id` routes; realistic status code and delay variation; autonomous traffic generator fires random requests every 1.5–4s
 
 ---
@@ -89,7 +90,7 @@ New packages needed: `@vitejs/plugin-react`, `typescript`, `@types/react`, `@typ
 - `src/pages/ProjectsPage.tsx` — Grid of `<ProjectCard>`, "New Project" button opens modal
 - `src/App.tsx` — `AppShell` layout with sticky `Sidebar`; `/projects` route added; `/` redirects to `/projects`
 
-#### 3.4 — Dashboard (stats + layout)
+#### ~~3.4 — Dashboard (stats + layout)~~ ✓ Done
 - `src/hooks/useAnalytics.ts` — `useAnalyticsSummary(projectId, range)` and `useAnalyticsEndpoints(projectId, range)`; `range: '24h' | '7d' | '30d' | 'all'` converted to `?from`/`?to` ISO params
 - `src/components/StatCard.tsx` — Label + large value display
 - `src/components/TimeRangeSelector.tsx` — Button group: 24h / 7d / 30d / All
