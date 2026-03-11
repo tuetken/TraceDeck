@@ -10,7 +10,7 @@
 | Package       | Status     | Notes                                                                             |
 | ------------- | ---------- | --------------------------------------------------------------------------------- |
 | `backend`     | Done       | Auth, Projects CRUD, Endpoints CRUD, Analytics routes, integration tests complete |
-| `frontend`    | Scaffolded | Dependencies installed, TypeScript not configured, no source code yet             |
+| `frontend`    | In Progress | Phase 3.1 scaffold complete; TypeScript + Tailwind + Vite configured, minimal src |
 | `sdk`         | Done       | `traceDeckLogger()` middleware implemented; zero dependencies, uses native fetch  |
 | `sample-data` | Done       | Example Express service with 3 routes + autonomous traffic generator              |
 
@@ -59,12 +59,13 @@
 Design reference: Linear dashboard aesthetic — near-black background, card-based layout, data-dense tables, Recharts for charts.
 New packages needed: `@vitejs/plugin-react`, `typescript`, `@types/react`, `@types/react-dom`, `tailwindcss`, `@tailwindcss/vite`, `recharts`, `amazon-cognito-identity-js`.
 
-#### 3.1 — Scaffold
+#### ~~3.1 — Scaffold~~ ✓ Done
 - `index.html` — Vite HTML entry, mounts `#root`
 - `vite.config.ts` — React plugin + Tailwind Vite plugin
 - `tsconfig.json` — Strict TypeScript config targeting ESNext
 - `src/main.tsx` — ReactDOM entry, `<App />` wrapped in `QueryClientProvider`
 - `src/index.css` — Tailwind `@import` + CSS custom properties for dark theme tokens
+- `src/App.tsx` — Minimal placeholder; will be replaced in Phase 3.2
 
 #### 3.2 — Auth
 - `src/lib/auth.ts` — `signIn`, `signOut`, `getSession` wrapping `amazon-cognito-identity-js`
