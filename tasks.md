@@ -10,7 +10,7 @@
 | Package       | Status     | Notes                                                                             |
 | ------------- | ---------- | --------------------------------------------------------------------------------- |
 | `backend`     | Done       | Auth, Projects CRUD, Endpoints CRUD, Analytics routes, integration tests complete |
-| `frontend`    | In Progress | Phase 3.1 scaffold complete; TypeScript + Tailwind + Vite configured, minimal src |
+| `frontend`    | In Progress | Phase 3.2 auth complete; Cognito sign-in, Axios interceptors, ProtectedRoute wired |
 | `sdk`         | Done       | `traceDeckLogger()` middleware implemented; zero dependencies, uses native fetch  |
 | `sample-data` | Done       | Example Express service with 3 routes + autonomous traffic generator              |
 
@@ -48,6 +48,8 @@
 - `backend/src/app.js` — Express app factory (`createApp(authMiddleware)`); decouples app setup from server startup to enable testing with mock auth
 - `backend/src/test/` — Vitest + Supertest integration test suite: 19 tests across health, projects, endpoints, and analytics routes; mock auth bypasses Cognito; real DB with per-file isolated test users cleaned up after each run
 - `sdk/index.js` — `traceDeckLogger(config)` Express middleware; zero dependencies (native fetch); fire-and-forget POST to `/ingest`; uses `req.baseUrl + req.path` for correct path capture at any mount depth
+- Phase 3.1 frontend scaffold — `index.html`, `vite.config.ts`, `tsconfig.json`, `src/main.tsx` with `QueryClientProvider`, `src/index.css` with dark theme CSS custom properties
+- Phase 3.2 frontend auth — Cognito sign-in via `amazon-cognito-identity-js`, Axios instance with token interceptor, `LoginPage`, `ProtectedRoute`, React Router v7 wired in `App.tsx`
 - `sample-data/index.js` — Standalone Express service with `GET /api/users`, `POST /api/orders`, `GET /api/products/:id` routes; realistic status code and delay variation; autonomous traffic generator fires random requests every 1.5–4s
 
 ---
@@ -60,6 +62,7 @@ Design reference: Linear dashboard aesthetic — near-black background, card-bas
 New packages needed: `@vitejs/plugin-react`, `typescript`, `@types/react`, `@types/react-dom`, `tailwindcss`, `@tailwindcss/vite`, `recharts`, `amazon-cognito-identity-js`.
 
 #### ~~3.1 — Scaffold~~ ✓ Done
+
 - `index.html` — Vite HTML entry, mounts `#root`
 - `vite.config.ts` — React plugin + Tailwind Vite plugin
 - `tsconfig.json` — Strict TypeScript config targeting ESNext
@@ -67,13 +70,13 @@ New packages needed: `@vitejs/plugin-react`, `typescript`, `@types/react`, `@typ
 - `src/index.css` — Tailwind `@import` + CSS custom properties for dark theme tokens
 - `src/App.tsx` — Minimal placeholder; will be replaced in Phase 3.2
 
-#### 3.2 — Auth
-- `src/lib/auth.ts` — `signIn`, `signOut`, `getSession` wrapping `amazon-cognito-identity-js`
-- `src/lib/api.ts` — Axios instance with `VITE_API_URL` base; request interceptor attaches Cognito `idToken`; 401 interceptor clears session and redirects to `/login`
-- `src/pages/LoginPage.tsx` — Email/password form, Linear-style centered card
-- `src/App.tsx` — `createBrowserRouter` with `<ProtectedRoute>` wrapper and full route tree
-
-Env vars required: `VITE_COGNITO_USER_POOL_ID`, `VITE_COGNITO_CLIENT_ID`, `VITE_API_URL`
+#### ~~3.2 — Auth~~ ✓ Done
+- `frontend/.env` — `VITE_COGNITO_USER_POOL_ID`, `VITE_COGNITO_CLIENT_ID`, `VITE_COGNITO_REGION`, `VITE_API_URL`
+- `src/lib/auth.ts` — `signIn`, `signOut`, `getIdToken`, `isAuthenticated` wrapping `amazon-cognito-identity-js`
+- `src/lib/api.ts` — Axios instance; request interceptor attaches Cognito id token; 401 interceptor redirects to `/login`
+- `src/pages/LoginPage.tsx` — Email/password form, dark theme, error display
+- `src/components/ProtectedRoute.tsx` — Checks session; redirects unauthenticated users to `/login`
+- `src/App.tsx` — React Router v7 with `/login`, `/` (protected placeholder), and wildcard catch-all
 
 #### 3.3 — Projects
 - `src/hooks/useProjects.ts` — `useProjects`, `useCreateProject`, `useDeleteProject` TanStack Query hooks
